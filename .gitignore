@@ -1,3 +1,7 @@
+# Data
+*.tar
+src/data/Task01_BrainTumour/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
