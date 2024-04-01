@@ -6,6 +6,43 @@ The candidates are the following:
 - UNETR
 - ResNet
 
+## U-Net
+
+TODO
+
+## UNETR
+
+### Overview
+
+UNETR, short for UNet with Transformer, is a novel architecture that combines the strengths of both UNet and Transformer models. It aims to improve semantic segmentation tasks, especially in scenarios where there are long-range dependencies between pixels.
+
+### Sources and Useful Resources
+
+- [Original paper](https://arxiv.org/abs/2103.10504)
+- [Code implementation](https://github.com/tamasino52/UNETR)
+
+### Key Features
+
+1. **Integration of UNet and Transformer**: UNETR integrates the architecture of UNet, known for its effective feature extraction and localization, with the self-attention mechanism of the Transformer, which excels in capturing long-range dependencies.
+
+2. **Self-Attention Mechanism**: By incorporating self-attention mechanisms, UNETR can effectively capture global context information, allowing it to make more informed segmentation decisions, especially in cases where distant pixels influence each other.
+
+3. **Hierarchical Downsampling and Upsampling**: Similar to UNet, UNETR employs a hierarchical architecture with downsampling and upsampling paths, enabling it to capture features at multiple scales while maintaining high-resolution segmentation outputs.
+
+4. **Positional Encoding**: To enable the Transformer to handle spatial information, UNETR incorporates positional encoding techniques, allowing it to effectively process the spatial relationships between pixels.
+
+### Performance
+
+UNETR is much larger than traditional UNet models due to the inclusion of Transformer layers (self-Attention). This increased complexity allows UNETR to capture long-range dependencies and spatial relationships more effectively, leading to improved segmentation performance. However, this comes at the cost of increased computational resources, higher memory usage and training time.
+
+### Possible Imrovements
+
+1. **Precision of Floats**: The precision of the floats used in the model can be reduced to reduce the memory usage and training time. float16 can be used instead of float32.
+2. **Model Pruning**: Model pruning can be used to reduce the number of parameters in the model, which can help reduce memory usage and training time.
+3. **Quantization**: Quantization can be used to reduce the precision of the weights and activations in the model, which can help reduce memory usage and training time.
+4. **Distillation**: Knowledge distillation can be used to train a smaller model to mimic the behavior of the larger model, which can help reduce memory usage and training time.
+
+
 ## ResNet
 
 ### Sources and Useful Resources
