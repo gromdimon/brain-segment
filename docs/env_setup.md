@@ -36,7 +36,7 @@ mamba env update -f environment.yml --prune
 And to push new chages to the environment.yml file, you can run the following command:
 
 ```bash
-mamba env export > environment.yml
+mamba env export --from-history > environment.yml
 ```
 
 To deactivate the environment, you can run the following command:
