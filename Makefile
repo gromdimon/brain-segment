@@ -21,11 +21,11 @@ format:	\
 
 .PHONY: format-isort
 format-isort:
-	isort --profile=black $(DIRS_PYTHON)
+	mamba run isort --profile=black $(DIRS_PYTHON)
 
 .PHONY: format-black
 format-black:
-	black --line-length 100 $(DIRS_PYTHON)
+	mamba run black --line-length 100 $(DIRS_PYTHON)
 
 .PHONY: lint
 lint: \
@@ -36,23 +36,23 @@ lint: \
 
 .PHONY: lint-isort
 lint-isort:
-	isort --profile=black --check-only --diff $(DIRS_PYTHON)
+	mamba run isort --profile=black --check-only --diff $(DIRS_PYTHON)
 
 .PHONY: lint-black
 lint-black:
-	black --check --line-length 100 --diff $(DIRS_PYTHON)
+	mamba run black --check --line-length 100 --diff $(DIRS_PYTHON)
 
 .PHONY: lint-flake8
 flake8:
-	flake8 --max-line-length 100 $(DIRS_PYTHON)
+	mamba run flake8 --max-line-length 100 $(DIRS_PYTHON)
 
 .PHONY: lint-mypy
 lint-mypy:
-	MYPYPATH=$(PWD)/stubs mypy $(DIRS_PYTHON_NO_ALEMBIC)
+	mamba run mypy $(DIRS_PYTHON)
 
 .PHONY: test
 test:
-	pytest \
+	mamba run pytest \
 		-n auto \
 		--cov-report term-missing \
 		--cov-report lcov \
@@ -79,6 +79,5 @@ docs:
 
 .PHONY: jupyterlab
 jupyterlab:
-	poetry run \
-		jupyter lab \
-			--ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888
+	mamba run jupyter lab \
+	    --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888

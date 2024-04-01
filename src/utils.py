@@ -1,10 +1,12 @@
 import os
-import torch
 
+import torch
 from monai.apps import DecathlonDataset
 from monai.data import DataLoader
 from monai.transforms import (
     Compose,
+    EnsureChannelFirstd,
+    EnsureTyped,
     LoadImaged,
     MapTransform,
     NormalizeIntensityd,
@@ -14,8 +16,6 @@ from monai.transforms import (
     RandShiftIntensityd,
     RandSpatialCropd,
     Spacingd,
-    EnsureTyped,
-    EnsureChannelFirstd,
 )
 
 
@@ -42,7 +42,8 @@ class ConvertToMultiChannelBasedOnBratsClassesd(MapTransform):
             result.append(d[key] == 2)
             d[key] = torch.stack(result, axis=0).float()
         return d
-    
+
+
 #: Transforms for training data
 train_transform = Compose(
     [
@@ -85,7 +86,9 @@ val_transform = Compose(
 )
 
 
-def load_data(train: bool = True, data_dir: str | None = None, batch_size: int = 1, download: bool = True) -> tuple[DataLoader, DecathlonDataset]:
+def load_data(
+    train: bool = True, data_dir: str | None = None, batch_size: int = 1, download: bool = True
+) -> tuple[DataLoader, DecathlonDataset]:
     """
     Load the BraTS dataset from the given directory.
 
@@ -103,8 +106,8 @@ def load_data(train: bool = True, data_dir: str | None = None, batch_size: int =
 
     # define dataset and data loader
     dataset = DecathlonDataset(
-        root_dir=root_dir, 
-        task="Task01_BrainTumour", 
+        root_dir=root_dir,
+        task="Task01_BrainTumour",
         transform=train_transform if train else val_transform,
         section="training" if train else "validation",
         download=download,
