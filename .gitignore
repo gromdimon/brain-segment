@@ -7,6 +7,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Data
+*.tar.gz
+*.tar
+src/data/Task01_BrainTumour/**
 # C extensions
 *.so
 

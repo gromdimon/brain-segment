@@ -33,6 +33,12 @@ If there are any updates to the environment, you can update the environment by r
 mamba env update -f environment.yml --prune
 ```
 
+And to push new chages to the environment.yml file, you can run the following command:
+
+```bash
+mamba env export --from-history > environment.yml
+```
+
 To deactivate the environment, you can run the following command:
 
 ```bash
