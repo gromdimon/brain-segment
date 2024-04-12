@@ -1,0 +1,42 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+albumentations = "*"
+black = "*"
+flake8 = "*"
+mypy = "*"
+gdown = "*"
+h5py = "*"
+certifi = "*"
+einops = "*"
+imageio = "*"
+isort = "*"
+lmdb = "*"
+matplotlib = "*"
+mlflow = "*"
+jupyter = "*"
+monai = "*"
+nibabel = "*"
+nilearn = "*"
+pandas = "*"
+pydicom = "*"
+pynrrd = "*"
+scikit-image = "*"
+scikit-learn = "*"
+scipy = "*"
+seaborn = "*"
+tensorboard = "*"
+tqdm = "*"
+transformers = "*"
+pytorch-ignite = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
