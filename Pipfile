@@ -35,6 +35,7 @@ tensorboard = "*"
 tqdm = "*"
 transformers = "*"
 pytorch-ignite = "*"
+pydantic = "*"
 
 [dev-packages]
 
