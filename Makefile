@@ -6,13 +6,23 @@ help:
 	@echo
 	@echo "Targets:"
 	@echo "  help    This help (default target)"
+	@echo "  environment	Install dependencies"
+	@echo "  environment-update    Update dependencies"
 	@echo "  format  Format source code"
 	@echo "  lint    Run lint checks"
+	@echo "  train	 Train the model"
 	@echo "  test    Run tests"
-	@echo "  ci      Install dependencies, run lints and tests"
-	@echo "  docs    Generate the documentation"
 	@echo "  jupyterlab Run jupyterlab"
 	@echo ""
+
+
+.PHONY: environment
+environment:
+	conda env create -f environment.yml
+
+.PHONY: environment-update
+environment-update:
+	conda env update -f environment.yml
 
 .PHONY: format
 format:	\
@@ -21,11 +31,11 @@ format:	\
 
 .PHONY: format-isort
 format-isort:
-	pipenv run isort --profile=black $(DIRS_PYTHON)
+	isort --profile=black $(DIRS_PYTHON)
 
 .PHONY: format-black
 format-black:
-	pipenv run black --line-length 100 $(DIRS_PYTHON)
+	black --line-length 100 $(DIRS_PYTHON)
 
 .PHONY: lint
 lint: \
@@ -36,48 +46,52 @@ lint: \
 
 .PHONY: lint-isort
 lint-isort:
-	pipenv run isort --profile=black --check-only --diff $(DIRS_PYTHON)
+	isort --profile=black --check-only --diff $(DIRS_PYTHON)
 
 .PHONY: lint-black
 lint-black:
-	pipenv run black --check --line-length 100 --diff $(DIRS_PYTHON)
+	black --check --line-length 100 --diff $(DIRS_PYTHON)
 
 .PHONY: lint-flake8
 flake8:
-	pipenv run flake8 --max-line-length 100 $(DIRS_PYTHON)
+	flake8 --max-line-length 100 $(DIRS_PYTHON)
 
 .PHONY: lint-mypy
 lint-mypy:
-	pipenv run mypy $(DIRS_PYTHON)
+	mypy $(DIRS_PYTHON)
+
+.PHONY: train
+train:
+	python -m src.train
 
 .PHONY: test
 test:
-	pipenv run pytest \
+	pytest \
 		-n auto \
 		--cov-report term-missing \
 		--cov-report lcov \
 		--cov=app \
 		tests/
 
-.PHONY: test-ci
-test-ci:
-	pytest \
-		--cov-report term-missing \
-		--cov-report lcov \
-		--cov=app \
-		tests/
+# .PHONY: test-ci
+# test-ci:
+# 	pytest \
+# 		--cov-report term-missing \
+# 		--cov-report lcov \
+# 		--cov=app \
+# 		tests/
 
-.PHONY: ci
-ci: \
-	deps \
-	lint \
-	test-ci
+# .PHONY: ci
+# ci: \
+# 	deps \
+# 	lint \
+# 	test-ci
 
-.PHONY: docs
-docs:
-	PYTHONPATH=$(PWD) -- make -C ../docs clean html
+# .PHONY: docs
+# docs:
+# 	PYTHONPATH=$(PWD) -- make -C ../docs clean html
 
 .PHONY: jupyterlab
 jupyterlab:
-	pipenv run jupyter lab \
+	jupyter lab \
 	    --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888

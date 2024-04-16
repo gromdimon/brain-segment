@@ -35,3 +35,4 @@ dependencies:
   - scipy
   - anaconda::jupyter
   - monai
+  - conda-forge::pydantic
