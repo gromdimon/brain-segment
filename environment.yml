@@ -1,35 +1,37 @@
 name: brain-segm
 channels:
   - conda-forge
+  - anaconda
 dependencies:
-  - albumentations
-  - black
-  - certifi
-  - einops
-  - flake8
+  - python=3.10
+  - torchvision
+  - pytorch
+  - torchaudio
   - gdown
+  - albumentations
+  - flake8
   - h5py
+  - black
+  - einops
+  - certifi
   - imageio
   - isort
-  - jupyter
+  - mypy
+  - mlflow
   - lmdb
   - matplotlib
-  - mlflow
-  - monai
-  - mypy
-  - nibabel
-  - nilearn
-  - pandas
   - pydicom
+  - nibabel
+  - pandas
+  - nilearn
   - pynrrd
-  - python=3.10
-  - pytorch
-  - pytorch-ignite
-  - scikit-image
-  - scikit-learn
-  - scipy
-  - seaborn
-  - tensorboard
-  - torchvision
+  - ignite
   - tqdm
   - transformers
+  - scikit-image
+  - tensorboard
+  - scikit-learn
+  - seaborn
+  - scipy
+  - anaconda::jupyter
+  - monai
