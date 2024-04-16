@@ -35,3 +35,4 @@ dependencies:
   - torchvision
   - tqdm
   - transformers
+  - conda-forge::pydantic
