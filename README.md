@@ -1,6 +1,10 @@
 # brain-segment
 Design of NN model for brain 3D images segmentation.
 
+## Overview
+
+The project focuses on investigation of small NN model for 3d images analysis. More information will come soon.
+
 
 ## Dev Quickstart
 
