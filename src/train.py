@@ -55,6 +55,8 @@ def train_segmentation_model(config: Config):
         epoch_loss = 0
         step = 0
         for batch_data in train_loader:
+            if step > 10:
+                continue
             step_start = time.time()
             step += 1
             inputs, labels = (
@@ -86,24 +88,24 @@ def train_segmentation_model(config: Config):
         epoch_loss_values.append(epoch_loss)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
-        if (epoch + 1) % config.val_interval == 0:
-            evaluate_model(
-                epoch,
-                model,
-                val_loader,
-                dice_metric,
-                dice_metric_batch,
-                post_trans,
-                device,
-                best_metrics_epochs_and_time,
-                metric_values,
-                metric_values_tc,
-                metric_values_wt,
-                metric_values_et,
-                best_metric,
-                best_metric_epoch,
-                total_start,
-            )
+        # if (epoch + 1) % config.val_interval == 0:
+        #     evaluate_model(
+        #         epoch,
+        #         model,
+        #         val_loader,
+        #         dice_metric,
+        #         dice_metric_batch,
+        #         post_trans,
+        #         device,
+        #         best_metrics_epochs_and_time,
+        #         metric_values,
+        #         metric_values_tc,
+        #         metric_values_wt,
+        #         metric_values_et,
+        #         best_metric,
+        #         best_metric_epoch,
+        #         total_start,
+        #     )
 
     total_time = time.time() - total_start
     print(
@@ -137,7 +139,7 @@ def evaluate_model(
             )
             val_outputs = model(
                 val_inputs
-            )  # Adjusted to directly use model instead of 'inference' for simplicity
+            )
             val_outputs = [post_trans(i) for i in decollate_batch(val_outputs)]
             dice_metric(y_pred=val_outputs, y=val_labels)
             dice_metric_batch(y_pred=val_outputs, y=val_labels)
