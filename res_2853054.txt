@@ -1,0 +1,18 @@
+pyenv-virtualenv: version `brains-segm' is not a virtualenv
+python -m src.train
+<frozen importlib._bootstrap>:283: DeprecationWarning: the load_module() method is deprecated and slated for removal in Python 3.12; use exec_module() instead
+/home/dzhr10/.local/lib/python3.10/site-packages/monai/utils/module.py:406: DeprecationWarning: Please import `distance_transform_cdt` from the `scipy.ndimage` namespace; the `scipy.ndimage.morphology` namespace is deprecated and will be removed in SciPy 2.0.0.
+  the_module = getattr(the_module, name)
+Data directory: /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data
+2024-05-07 12:28:15,712 - INFO - Verified 'Task01_BrainTumour.tar', md5: 240a19d752f0d9e9101544901065d872.
+2024-05-07 12:28:15,713 - INFO - File exists: /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data/Task01_BrainTumour.tar, skipped downloading.
+2024-05-07 12:28:15,718 - INFO - Non-empty folder exists in /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data/Task01_BrainTumour, skipped extracting.
+/home/dzhr10/.conda/envs/brain-segm/lib/python3.10/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Data directory: /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data
+2024-05-07 12:28:28,566 - INFO - Verified 'Task01_BrainTumour.tar', md5: 240a19d752f0d9e9101544901065d872.
+2024-05-07 12:28:28,567 - INFO - File exists: /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data/Task01_BrainTumour.tar, skipped downloading.
+2024-05-07 12:28:28,568 - INFO - Non-empty folder exists in /sc-projects/sc-proj-dh-ag-eils-ml/brain_segm/brain-segment/src/data/Task01_BrainTumour, skipped extracting.
+----------
+epoch 1/30
+slurmstepd: error: *** JOB 2853054 ON s-sc-node004 CANCELLED AT 2024-05-07T12:48:28 ***
