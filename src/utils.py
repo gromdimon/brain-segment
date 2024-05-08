@@ -114,9 +114,9 @@ def load_data(
         section="training" if train else "validation",
         download=download,
         cache_rate=0.0,
-        num_workers=4,
+        num_workers=2,
     )
-    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=train, num_workers=4)
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=train, num_workers=2)
     return data_loader, dataset
 
 
