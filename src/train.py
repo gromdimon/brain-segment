@@ -10,7 +10,7 @@ from monai.data import decollate_batch
 from pydantic import BaseModel
 
 from src.model import SegmentationModel
-from src.utils import load_data
+from src.utils import get_root_directory, load_data
 
 
 class Config(BaseModel):
@@ -45,6 +45,7 @@ def train_segmentation_model(config: Config):
     metric_values_tc = []
     metric_values_wt = []
     metric_values_et = []
+    path = os.path.join(get_root_directory(), "models")
 
     total_start = time.time()
     for epoch in range(config.max_epochs):
@@ -88,7 +89,10 @@ def train_segmentation_model(config: Config):
         epoch_loss_values.append(epoch_loss)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
-        # if (epoch + 1) % config.val_interval == 0:
+        if (epoch + 1) % config.val_interval == 0:
+            # Save the model
+            torch.save(model.state_dict(), os.path.join(path, f"{epoch}_model.pth"))
+            # Evaluate the model
         #     evaluate_model(
         #         epoch,
         #         model,
@@ -107,6 +111,8 @@ def train_segmentation_model(config: Config):
         #         total_start,
         #     )
 
+    # Save the last model
+    torch.save(model.state_dict(), os.path.join(path, "last_model.pth"))
     total_time = time.time() - total_start
     print(
         f"train completed, best_metric: {best_metric:.4f} at epoch: {best_metric_epoch}, total time: {total_time}."
@@ -137,9 +143,7 @@ def evaluate_model(
                 val_data["image"].to(device),
                 val_data["label"].to(device),
             )
-            val_outputs = model(
-                val_inputs
-            )
+            val_outputs = model(val_inputs)
             val_outputs = [post_trans(i) for i in decollate_batch(val_outputs)]
             dice_metric(y_pred=val_outputs, y=val_labels)
             dice_metric_batch(y_pred=val_outputs, y=val_labels)
