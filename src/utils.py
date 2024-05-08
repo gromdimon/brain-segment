@@ -118,3 +118,13 @@ def load_data(
     )
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=train, num_workers=4)
     return data_loader, dataset
+
+
+def get_root_directory() -> str:
+    """
+    Get the root directory of the project.
+
+    Returns:
+        The root directory.
+    """
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)))

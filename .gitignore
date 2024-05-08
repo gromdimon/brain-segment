@@ -17,6 +17,11 @@ src/data/Task01_BrainTumour/**
 # C extensions
 *.so
 
+# Models
+*.h5
+*.pt
+*.pth
+
 # Distribution / packaging
 .Python
 build/
