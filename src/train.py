@@ -172,9 +172,10 @@ def evaluate_model(
             best_metrics_epochs_and_time[0].append(best_metric)
             best_metrics_epochs_and_time[1].append(best_metric_epoch)
             best_metrics_epochs_and_time[2].append(time.time() - total_start)
+            path = os.path.join(get_root_directory(), "models")
             torch.save(
                 model.state_dict(),
-                os.path.join("models", "best_metric_model.pth"),
+                os.path.join(path, "best_metric_model.pth"),
             )
             print("saved new best metric model")
         print(
