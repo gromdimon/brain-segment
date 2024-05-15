@@ -1,0 +1,1 @@
+srun --pty --mem=4G --gres=gpu -p gpu --time=10:00:00 --job-name="interactive_job" bash
