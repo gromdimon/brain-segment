@@ -29,6 +29,7 @@ def train_segmentation_model(config: Config):
 
     seg_model = SegmentationModel(device)
     model = seg_model.get_model()
+    model.to(device)   # Move the model to the GPU if available
     loss_function = seg_model.get_loss_function()
     optimizer = torch.optim.Adam(
         model.parameters(), config.learning_rate, weight_decay=config.weight_decay
@@ -136,23 +137,38 @@ def evaluate_model(
     total_start,
 ):
     model.eval()
+    VAL_AMP = True if device.type == "cuda" else False
+    def inference(input):
+        def _compute(input):
+            return sliding_window_inference(
+                inputs=input,
+                roi_size=(240, 240, 144),
+                sw_batch_size=1,
+                predictor=model,
+                overlap=0.5,
+            )
+
+        if VAL_AMP:
+            with torch.cuda.amp.autocast():
+                return _compute(input)
+        else:
+            return _compute(input)
     with torch.no_grad():
+        val_start = time.time()
         for val_data in val_loader:
             val_inputs, val_labels = (
                 val_data["image"].to(device),
                 val_data["label"].to(device),
             )
-            # Apply sliding window inference
-            val_outputs = sliding_window_inference(
-                inputs=val_inputs,
-                roi_size=(240, 240, 160),  # Define the size of the sliding window
-                sw_batch_size=1,
-                predictor=model,
-                overlap=0.5,
+            val_outputs = inference(
+                val_inputs
             )
             val_outputs = [post_trans(i) for i in decollate_batch(val_outputs)]
             dice_metric(y_pred=val_outputs, y=val_labels)
             dice_metric_batch(y_pred=val_outputs, y=val_labels)
+        print(
+            f"validation time: {(time.time() - val_start):.4f}"
+        )
 
         metric = dice_metric.aggregate().item()
         metric_values.append(metric)
