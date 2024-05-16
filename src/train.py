@@ -13,9 +13,10 @@ from pydantic import BaseModel
 from src.model import SegmentationModel
 from src.utils import get_root_directory, load_data
 
+import wandb
 
 class Config(BaseModel):
-    max_epochs: int = 30
+    max_epochs: int = 5
     val_interval: int = 1
     learning_rate: float = 1e-4
     weight_decay: float = 1e-5
@@ -31,6 +32,7 @@ def train_segmentation_model(config: Config):
     model = seg_model.get_model()
     model.to(device)   # Move the model to the GPU if available
     loss_function = seg_model.get_loss_function()
+    wandb.watch(model, loss_function, log="all", log_freq=10)
     optimizer = torch.optim.Adam(
         model.parameters(), config.learning_rate, weight_decay=config.weight_decay
     )
@@ -60,7 +62,7 @@ def train_segmentation_model(config: Config):
         for batch_data in train_loader:
             if step >= 10:
                 print(f"CAUTION: Skipping rest of the training set for testing purposes, REMOVE THIS WHEN DONE")
-                continue
+                break
             step_start = time.time()
             step += 1
             inputs, labels = (
@@ -206,5 +208,9 @@ def evaluate_model(
 
 
 if __name__ == "__main__":
-    config = Config()
-    train_segmentation_model(config)
+    config_data = Config()
+    wandb.init(
+        project="brain-segmentation",
+        config=config_data.dict()
+    )
+    train_segmentation_model(config_data)
