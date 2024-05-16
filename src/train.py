@@ -58,6 +58,8 @@ def train_segmentation_model(config: Config):
         epoch_loss = 0
         step = 0
         for batch_data in train_loader:
+            if step >= 10:
+                print(f"CAUTION: Skipping rest of the training set for testing purposes, REMOVE THIS WHEN DONE")
             step_start = time.time()
             step += 1
             inputs, labels = (
