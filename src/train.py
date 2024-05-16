@@ -60,6 +60,7 @@ def train_segmentation_model(config: Config):
         for batch_data in train_loader:
             if step >= 10:
                 print(f"CAUTION: Skipping rest of the training set for testing purposes, REMOVE THIS WHEN DONE")
+                continue
             step_start = time.time()
             step += 1
             inputs, labels = (
