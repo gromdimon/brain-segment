@@ -21,6 +21,7 @@ src/data/Task01_BrainTumour/**
 *.h5
 *.pt
 *.pth
+!src/models/save/*
 
 # Distribution / packaging
 .Python
