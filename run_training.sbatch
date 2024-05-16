@@ -10,9 +10,12 @@
 # Load any required modules (if needed)
 # module load cuda/11.1  # Example: adjust this based on your environment
 
+# Initialize conda
+#source ~/miniconda3/etc/profile.d/conda.sh
+
 # Activate your Python environment
-source activate brain-segm  # Replace 'myenv' with the name of your conda environment
+#srun conda activate brain-segm
 
 # Run the training script
-srun make train
+srun python -m src.train
 
