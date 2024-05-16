@@ -12,25 +12,7 @@ The project focuses on investigation of small NN model for 3d images analysis. M
 
 ### Environment setup
 
-#### Initially create environment
-```bash
-make environment
-```
-
-#### Update environment
-```bash
-make environment-update
-```
-
-#### Activate environment
-```bash
-conda activate brain-segm
-```
-
-#### Deactivate environment
-```bash
-conda deactivate
-```
+Please refer to docs/train_job.md for the detailed instructions on how to set up the environment.
 
 ### Development
 
