@@ -13,6 +13,7 @@ from pydantic import BaseModel
 from src.model import SegmentationModel
 from src.utils import get_root_directory, load_data
 
+import wandb
 
 class Config(BaseModel):
     max_epochs: int = 30
@@ -31,6 +32,7 @@ def train_segmentation_model(config: Config):
     model = seg_model.get_model()
     model.to(device)   # Move the model to the GPU if available
     loss_function = seg_model.get_loss_function()
+    wandb.watch(model, loss_function, log="all", log_freq=10)
     optimizer = torch.optim.Adam(
         model.parameters(), config.learning_rate, weight_decay=config.weight_decay
     )
@@ -57,6 +59,7 @@ def train_segmentation_model(config: Config):
         model.train()
         epoch_loss = 0
         step = 0
+        example_ct = 0
         for batch_data in train_loader:
             step_start = time.time()
             step += 1
@@ -79,14 +82,29 @@ def train_segmentation_model(config: Config):
                 optimizer.step()
 
             epoch_loss += loss.item()
+            example_ct += inputs.size(0)
             print(
                 f"{step}/{len(train_ds) // train_loader.batch_size}"
                 f", train_loss: {loss.item():.4f}"
                 f", step time: {(time.time() - step_start):.4f}"
             )
+            wandb.log({"learning_rate": optimizer.param_groups[0]['lr']}, step=example_ct)
+
+            total_norm = 0
+            for p in model.parameters():
+                if p.grad is not None:
+                    param_norm = p.grad.data.norm(2)
+                    total_norm += param_norm.item() ** 2
+            total = total_norm ** 0.5
+            wandb.log({"grad_norm": total_norm}, step=example_ct)
+
+            for name, param in model.named_parameters():
+                if param.requires_grad:
+                    wandb.log({f"weight_update_{name}": param.data.norm(2)}, step=example_ct)
         lr_scheduler.step()
         epoch_loss /= step
         epoch_loss_values.append(epoch_loss)
+        wandb.log({"epoch": epoch, "loss": epoch_loss}, step=example_ct)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
         if (epoch + 1) % config.val_interval == 0:
@@ -182,6 +200,14 @@ def evaluate_model(
         dice_metric.reset()
         dice_metric_batch.reset()
 
+        wandb.log({
+            "val_mean_dice": metric,
+            "val_dice_tc": metric_tc,
+            "val_dice_wt": metric_wt,
+            "val_dice_et": metric_et,
+            "epoch": epoch
+        })
+
         if metric > best_metric:
             best_metric = metric
             best_metric_epoch = epoch + 1
@@ -203,5 +229,9 @@ def evaluate_model(
 
 
 if __name__ == "__main__":
-    config = Config()
-    train_segmentation_model(config)
+    config_data = Config()
+    wandb.init(
+        project="brain-segmentation",
+        config=config_data.dict()
+    )
+    train_segmentation_model(config_data)
