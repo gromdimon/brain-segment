@@ -16,7 +16,7 @@ from src.utils import get_root_directory, load_data
 import wandb
 
 class Config(BaseModel):
-    max_epochs: int = 5
+    max_epochs: int = 30
     val_interval: int = 1
     learning_rate: float = 1e-4
     weight_decay: float = 1e-5
@@ -59,10 +59,8 @@ def train_segmentation_model(config: Config):
         model.train()
         epoch_loss = 0
         step = 0
+        example_ct = 0
         for batch_data in train_loader:
-            if step >= 10:
-                print(f"CAUTION: Skipping rest of the training set for testing purposes, REMOVE THIS WHEN DONE")
-                break
             step_start = time.time()
             step += 1
             inputs, labels = (
@@ -84,14 +82,29 @@ def train_segmentation_model(config: Config):
                 optimizer.step()
 
             epoch_loss += loss.item()
+            example_ct += inputs.size(0)
             print(
                 f"{step}/{len(train_ds) // train_loader.batch_size}"
                 f", train_loss: {loss.item():.4f}"
                 f", step time: {(time.time() - step_start):.4f}"
             )
+            wandb.log({"learning_rate": optimizer.param_groups[0]['lr']}, step=example_ct)
+
+            total_norm = 0
+            for p in model.parameters():
+                if p.grad is not None:
+                    param_norm = p.grad.data.norm(2)
+                    total_norm += param_norm.item() ** 2
+            total = total_norm ** 0.5
+            wandb.log({"grad_norm": total_norm}, step=example_ct)
+
+            for name, param in model.named_parameters():
+                if param.requires_grad:
+                    wandb.log({f"weight_update_{name}": param.data.norm(2)}, step=example_ct)
         lr_scheduler.step()
         epoch_loss /= step
         epoch_loss_values.append(epoch_loss)
+        wandb.log({"epoch": epoch, "loss": epoch_loss}, step=example_ct)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
         if (epoch + 1) % config.val_interval == 0:
@@ -186,6 +199,14 @@ def evaluate_model(
         metric_values_et.append(metric_et)
         dice_metric.reset()
         dice_metric_batch.reset()
+
+        wandb.log({
+            "val_mean_dice": metric,
+            "val_dice_tc": metric_tc,
+            "val_dice_wt": metric_wt,
+            "val_dice_et": metric_et,
+            "epoch": epoch
+        })
 
         if metric > best_metric:
             best_metric = metric
