@@ -40,12 +40,12 @@ The Brain Segmentation project is focused on developing a lightweight model for 
 
 For detailed steps, refer to the following markdown files:
 
-- [NN Architectures Investigation](nn_architectures_investigation.md)
-- [Investigation Results](investigation_results.md)
-- [Setup Jupyter](setup_jupyter.md)
-- [Pipenv Environment Setup](pipenv_env.md)
-- [Train Job](train_job.md)
-- [GitHub Workflow](github_workflow.md)
+- [NN Architectures Investigation](docs/nn_architectures_investigation.md)
+- [Investigation Results](docs/investigation_results.md)
+- [Setup Jupyter](docs/setup_jupyter.md)
+- [Pipenv Environment Setup](docs/pipenv_env.md)
+- [Train Job](docs/train_job.md)
+- [GitHub Workflow](docs/github_workflow.md)
 
 ## Dataset
 
