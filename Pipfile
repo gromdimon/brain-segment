@@ -34,6 +34,7 @@ tqdm = "*"
 transformers = "*"
 pytorch-ignite = "*"
 pydantic = "*"
+wandb = "*"
 
 [dev-packages]
 
