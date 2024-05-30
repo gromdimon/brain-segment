@@ -59,7 +59,6 @@ def train_segmentation_model(config: Config):
         model.train()
         epoch_loss = 0
         step = 0
-        example_ct = 0
         for batch_data in train_loader:
             step_start = time.time()
             step += 1
@@ -88,7 +87,7 @@ def train_segmentation_model(config: Config):
                 f", train_loss: {loss.item():.4f}"
                 f", step time: {(time.time() - step_start):.4f}"
             )
-            wandb.log({"learning_rate": optimizer.param_groups[0]['lr']}, step=example_ct)
+            wandb.log({"learning_rate": optimizer.param_groups[0]['lr']}, step=step)
 
             total_norm = 0
             for p in model.parameters():
@@ -96,15 +95,15 @@ def train_segmentation_model(config: Config):
                     param_norm = p.grad.data.norm(2)
                     total_norm += param_norm.item() ** 2
             total = total_norm ** 0.5
-            wandb.log({"grad_norm": total_norm}, step=example_ct)
+            wandb.log({"grad_norm": total_norm}, step=step)
 
             for name, param in model.named_parameters():
                 if param.requires_grad:
-                    wandb.log({f"weight_update_{name}": param.data.norm(2)}, step=example_ct)
+                    wandb.log({f"weight_update_{name}": param.data.norm(2)}, step=step)
         lr_scheduler.step()
         epoch_loss /= step
         epoch_loss_values.append(epoch_loss)
-        wandb.log({"epoch": epoch, "loss": epoch_loss}, step=example_ct)
+        wandb.log({"epoch": epoch, "loss": epoch_loss}, step=step)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
         if (epoch + 1) % config.val_interval == 0:
