@@ -81,7 +81,6 @@ def train_segmentation_model(config: Config):
                 optimizer.step()
 
             epoch_loss += loss.item()
-            example_ct += inputs.size(0)
             print(
                 f"{step}/{len(train_ds) // train_loader.batch_size}"
                 f", train_loss: {loss.item():.4f}"
