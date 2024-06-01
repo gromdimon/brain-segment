@@ -6,7 +6,6 @@ import os
 import time
 
 import torch
-from torch.optim import RMSprop
 from monai.data import decollate_batch
 from monai.inferers import sliding_window_inference
 from pydantic import BaseModel
@@ -34,7 +33,9 @@ def train_segmentation_model(config: Config):
     model.to(device)   # Move the model to the GPU if available
     loss_function = seg_model.get_loss_function()
     wandb.watch(model, loss_function, log="all", log_freq=10)
-    optimizer = RMSprop(model.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam(
+        model.parameters(), config.learning_rate, weight_decay=config.weight_decay
+    )
     lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=config.max_epochs)
     dice_metric, dice_metric_batch, post_trans = seg_model.get_metrics()
 
