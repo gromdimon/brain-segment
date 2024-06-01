@@ -7,7 +7,7 @@ from monai.transforms import Activations, AsDiscrete, Compose
 
 
 class SegmentationModel:
-    def __init__(self, device, in_channels=4, out_channels=3, features=(16, 32, 64)):
+    def __init__(self, device, in_channels=4, out_channels=3, features=(8, 16, 32)):
         self.device = device
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -26,7 +26,7 @@ class SegmentationModel:
             num_res_units=2,
             act="PRELU",
             norm="INSTANCE",
-            dropout=0.1,
+            dropout=0,
             bias=True,
             adn_ordering="NDA",
         )
