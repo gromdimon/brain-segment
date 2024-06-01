@@ -178,3 +178,6 @@ cython_debug/
 
 # Weights and Biases
 wandb/
+
+# ONNX folder
+src/onnx

@@ -53,6 +53,12 @@ mamba install gdown h5py imageio lmdb matplotlib mlflow -y
 mamba install jupyter monai nibabel nilearn pandas pydicom scikit-image scikit-learn scipy seaborn tensorboard tqdm transformers pydantic -y
 mamba install black flake8 mypy isort -y
 mamba install wandb -y
+mamba install -c conda-forge onnx
+
+pip install openvino-dev
+pip install openvino-dev[extras]
+pip install openvino-dev[pytorch,onnx]
+pip install opencv-python-headless
 ```
 
 ## Step 5: Run the iterative job
