@@ -26,7 +26,7 @@ class SegmentationModel:
             num_res_units=2,
             act="PRELU",
             norm="INSTANCE",
-            dropout=0.1,
+            dropout=0,
             bias=True,
             adn_ordering="NDA",
         )
