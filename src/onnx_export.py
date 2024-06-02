@@ -14,7 +14,7 @@ def export_onnx(model_path: str, device: str = None):
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
     model.eval()
-    dummy_input = torch.randn(1, 4, 240, 240, 155)
+    dummy_input = torch.randn(1, 4, 240, 240, 160)
     torch.onnx.export(model, (dummy_input, ), 'src/onnx/model.onnx')
 
 export_onnx("src/models/last_model.pth")
